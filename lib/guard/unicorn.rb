@@ -19,6 +19,7 @@ module Guard
         watchers << Watcher.new( /^lib\/.+\.rb$/ )
       end
 
+      @unicorn_command = options.fetch(:unicorn_command, 'unicorn_rails')
       @run_as_daemon  = options.fetch(:daemonize, false)
       @enable_bundler = options.fetch(:bundler, true) 
       @pid_file       = options.fetch(:pid_file, DEFAULT_PID_PATH)
@@ -39,7 +40,7 @@ module Guard
 
       cmd = []
       cmd << "bundle exec" if @enable_bundler
-      cmd << "unicorn_rails"
+      cmd << "#{@unicorn_command}"
       cmd << "-c #{@config_file}"
       cmd << "-p #{@port}" unless @socket
       cmd << "-l #{@socket}" if @socket
